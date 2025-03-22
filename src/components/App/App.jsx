@@ -1,91 +1,36 @@
-import { useState, useEffect } from "react";
-import searchImages from "../../api";
-import SearchBar from "../SearchBar/SearchBar";
-import ImageGallery from "../ImageGallery/ImageGallery";
-import Loader from "../Loader/Loader";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import LoadMoreButton from "../LoadMoreButton/LoadMoreButton";
-import ImageModal from "../ImageModal/ImageModal";
+import { Route, Routes } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import MovieReviews from "./MovieReviews/MovieReviews";
+import MovieCast from "./MovieCast/MovieCast";
+import Navigation from "./Navigation/Navigation";
+
+const HomePage = lazy(() => import("../../pages/HomePage"));
+const MoviesPage = lazy(() => import("../../pages/MoviesPage"));
+const MovieDetailsPage = lazy(() => import("../../pages/MovieDetailsPage"));
+const NotFoundPage = lazy(() => import("../../pages/NotFoundPage"));
 
 export default function App() {
-  const [response, setResponse] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
-  const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
-  const loadMore = () => {
-    setPage(page + 1);
-  };
-
-  const submitForm = (input) => {
-    setResponse([]);
-    setSearchTerm(input);
-    setPage(1);
-  };
-
-  useEffect(() => {
-    if (searchTerm === "") {
-      return;
-    }
-    async function getData() {
-      try {
-        setErrorMessage(false);
-        setLoading(true);
-        const results = await searchImages(searchTerm, page);
-        setResponse((prevResults) => {
-          return [...prevResults, ...results];
-        });
-        setLoading(false);
-      } catch {
-        setErrorMessage(true);
-        setLoading(false);
-      }
-    }
-    getData();
-  }, [searchTerm, page]);
-
-  const openModal = (index) => {
-    setSelectedImageIndex(index);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedImageIndex(0);
-  };
-
-  const goToPrevImage = () => {
-    setSelectedImageIndex((prevIndex) =>
-      prevIndex === 0 ? response.length - 1 : prevIndex - 1
-    );
-  };
-
-  const goToNextImage = () => {
-    setSelectedImageIndex((prevIndex) =>
-      prevIndex === response.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
   return (
     <div>
-      <SearchBar onSubmit={submitForm} />
-      {errorMessage && <ErrorMessage />}
-      {response.length > 0 && (
-        <ImageGallery result={response} openModal={openModal} />
-      )}
-      {loading && <Loader />}
-      {response.length > 0 && <LoadMoreButton load={loadMore} />}
-      <ImageModal
-        isOpen={isModalOpen}
-        images={response.map((image) => image.urls.full)}
-        currentIndex={selectedImageIndex}
-        onClose={closeModal}
-        onPrev={goToPrevImage}
-        onNext={goToNextImage}
-      />
+      <Navigation />
+
+      <Suspense
+        fallback={
+          <p>
+            <b>Loading page...</b>
+          </p>
+        }
+      >
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/movies" element={<MoviesPage />} />
+          <Route path="/movies/:movieId" element={<MovieDetailsPage />}>
+            <Route path="cast" element={<MovieCast />} />
+            <Route path="reviews" element={<MovieReviews />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }

@@ -1,0 +1,49 @@
+.movieCastContainer {
+  padding: 20px;
+  text-align: center;
+}
+
+.actorCardTitle {
+  font-size: 1.2rem;
+  margin: 10px 0;
+  color: #333;
+}
+
+.actorCardDescription {
+  font-size: 1rem;
+  color: #555;
+  margin: 5px 0;
+}
+
+.actorCard {
+  display: inline-block;
+  width: 150px;
+  margin: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.actorCardImage {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.actorList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.noActorInfo {
+  color: #999;
+  font-size: 1.2rem;
+}

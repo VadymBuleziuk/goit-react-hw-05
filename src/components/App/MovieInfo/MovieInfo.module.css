@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  max-width: 800px;
+  margin: 20px auto;
+  align-items: flex-start;
+}
+
+.image {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.image img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.textContent {
+  margin-left: 20px;
+}
+
+.title {
+  font-size: 22px;
+  margin: 0;
+}
+
+.userScore {
+  font-size: 16px;
+  color: gray;
+  margin: 5px 0;
+}
+
+.overview,
+.genres {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.genreList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.genreList li {
+  background: #ddd;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
